@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="schemas.android.com/tools"
+    tools:context="org.mycompany.bluetoothtictactoe.GameFragment"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto" >
+    <item
+        android:id="@+id/connect_scan"
+        android:icon="@drawable/ic_action_device_access_bluetooth_searching"
+        myapp:showAsAction="always"
+        android:title="@string/connect"/>
+    <item
+        android:id="@+id/discoverable"
+        myapp:showAsAction="ifRoom"
+        android:title="@string/discoverable"/>
+
+</menu>
