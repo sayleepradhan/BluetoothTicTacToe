@@ -469,5 +469,10 @@ public class BluetoothService {
             }
         }
     }
+    public boolean isConnected(){
+        if (mConnectedThread !=null)
+            return true;
+        return false;
+    }
 
 }
