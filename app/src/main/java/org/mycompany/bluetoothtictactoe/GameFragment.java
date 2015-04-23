@@ -276,6 +276,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -312,6 +313,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -347,6 +349,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -383,6 +386,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -418,6 +422,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -453,6 +458,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -488,6 +494,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -523,6 +530,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         game_status.setText("Nobody Won!");
+                        sendData("disable");
                         disableButtons();
                     }
                 }
@@ -558,6 +566,7 @@ public class GameFragment extends Fragment {
                     }
                     if (board.noWinner()){
                         disableButtons();
+                        sendData("disable");
                         game_status.setText("Nobody Won!");
                     }
                 }
@@ -736,6 +745,10 @@ public class GameFragment extends Fragment {
         }
         else if (message.contains("newgame")){
             displayNewGameMsg();
+            resetGame();
+        }
+        else if (message.contains("disable")){
+            disableButtons();
         }
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
