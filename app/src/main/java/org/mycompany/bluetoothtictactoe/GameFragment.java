@@ -335,7 +335,7 @@ public class GameFragment extends Fragment {
             btn[3].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(3) == ' ' && board.noWinner()) {
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(3) == ' ' && !board.noWinner()) {
                         if (self_symbol.equals("X"))
                             btn[3].setImageResource(R.drawable.cross_image);
                         else
@@ -395,9 +395,9 @@ public class GameFragment extends Fragment {
                 public void onClick(View v) {
                     if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(5) == ' ' && !board.noWinner()) {
                         if (self_symbol.equals("X"))
-                            btn[4].setImageResource(R.drawable.cross_image);
+                            btn[5].setImageResource(R.drawable.cross_image);
                         else
-                            btn[4].setImageResource(R.drawable.zero_image);
+                            btn[5].setImageResource(R.drawable.zero_image);
                         turn = false;
                         char moveResult = board.setMove(self_symbol.charAt(0), 5);
                         if (moveResult != ' ') {
@@ -773,8 +773,9 @@ public class GameFragment extends Fragment {
         if (moveResult==self_symbol.charAt(0)){
             game_status.setText("You Won!");
         }
-        else
-           game_status.setText("You Lost");
+        else {
+            game_status.setText("You Lost");
+        }
         setupBoard();
     }
 
