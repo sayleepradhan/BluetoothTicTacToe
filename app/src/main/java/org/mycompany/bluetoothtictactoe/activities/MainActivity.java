@@ -1,15 +1,15 @@
-package org.mycompany.bluetoothtictactoe;
+package org.mycompany.bluetoothtictactoe.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.mycompany.bluetoothtictactoe.common.activities.SampleActivityBase;
-import org.mycompany.bluetoothtictactoe.common.logger.Log;
-import org.mycompany.bluetoothtictactoe.common.logger.LogFragment;
-import org.mycompany.bluetoothtictactoe.common.logger.LogWrapper;
-import org.mycompany.bluetoothtictactoe.common.logger.MessageOnlyLogFilter;
+import org.mycompany.bluetoothtictactoe.R;
+import org.mycompany.bluetoothtictactoe.logger.Log;
+import org.mycompany.bluetoothtictactoe.logger.LogFragment;
+import org.mycompany.bluetoothtictactoe.logger.LogWrapper;
+import org.mycompany.bluetoothtictactoe.logger.MessageOnlyLogFilter;
 
 
 public class MainActivity extends SampleActivityBase {

@@ -1,10 +1,10 @@
-package org.mycompany.bluetoothtictactoe.common.activities;
+package org.mycompany.bluetoothtictactoe.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import org.mycompany.bluetoothtictactoe.common.logger.Log;
-import org.mycompany.bluetoothtictactoe.common.logger.LogWrapper;
+import org.mycompany.bluetoothtictactoe.logger.Log;
+import org.mycompany.bluetoothtictactoe.logger.LogWrapper;
 
 /**
  * Created by Saylee on 4/19/2015.

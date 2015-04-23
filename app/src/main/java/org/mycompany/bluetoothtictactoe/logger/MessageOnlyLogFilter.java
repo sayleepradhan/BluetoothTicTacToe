@@ -1,27 +1,20 @@
-package org.mycompany.bluetoothtictactoe.common.logger;
+package org.mycompany.bluetoothtictactoe.logger;
 
 /**
  * Created by Saylee on 4/19/2015.
  */
 public class MessageOnlyLogFilter implements LogNode {
 
-    LogNode mNext;
+    LogNode logNode;
 
-    /**
-     * Takes the "next" LogNode as a parameter, to simplify chaining.
-     *
-     * @param next The next LogNode in the pipeline.
-     */
-    public MessageOnlyLogFilter(LogNode next) {
-        mNext = next;
-    }
+
 
     public MessageOnlyLogFilter() {
     }
 
     @Override
     public void println(int priority, String tag, String msg, Throwable tr) {
-        if (mNext != null) {
+        if (logNode != null) {
             getNext().println(Log.NONE, null, msg, null);
         }
     }
@@ -30,14 +23,14 @@ public class MessageOnlyLogFilter implements LogNode {
      * Returns the next LogNode in the chain.
      */
     public LogNode getNext() {
-        return mNext;
+        return logNode;
     }
 
     /**
      * Sets the LogNode data will be sent to..
      */
     public void setNext(LogNode node) {
-        mNext = node;
+        logNode = node;
     }
 
 }

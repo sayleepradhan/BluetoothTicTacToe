@@ -13,7 +13,7 @@
         >
 
         <fragment
-            android:name="org.mycompany.bluetoothtictactoe.common.logger.LogFragment"
+            android:name="org.mycompany.bluetoothtictactoe.logger.LogFragment"
             android:id="@+id/log_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

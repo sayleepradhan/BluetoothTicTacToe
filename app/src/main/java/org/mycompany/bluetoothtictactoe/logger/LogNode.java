@@ -1,4 +1,4 @@
-package org.mycompany.bluetoothtictactoe.common.logger;
+package org.mycompany.bluetoothtictactoe.logger;
 
 /**
  * Created by Saylee on 4/19/2015.

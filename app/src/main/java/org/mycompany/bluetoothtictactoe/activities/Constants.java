@@ -1,4 +1,4 @@
-package org.mycompany.bluetoothtictactoe;
+package org.mycompany.bluetoothtictactoe.activities;
 
 /**
  * Created by Saylee on 4/19/2015.

@@ -1,4 +1,4 @@
-package org.mycompany.bluetoothtictactoe.common.logger;
+package org.mycompany.bluetoothtictactoe.logger;
 
 import android.app.Activity;
 import android.content.Context;
@@ -89,13 +89,7 @@ public class LogView extends TextView implements LogNode {
         }
     }
 
-    public LogNode getNext() {
-        return mNext;
-    }
 
-    public void setNext(LogNode node) {
-        mNext = node;
-    }
 
     /** Takes a string and adds to it, with a separator, if the bit to be added isn't null. Since
      * the logger takes so many arguments that might be null, this method helps cut out some of the

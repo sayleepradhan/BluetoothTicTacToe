@@ -1,15 +1,12 @@
-package org.mycompany.bluetoothtictactoe.common.logger;
+package org.mycompany.bluetoothtictactoe.logger;
 
 /**
  * Created by Saylee on 4/19/2015.
  */
 public class LogWrapper implements LogNode  {
-    private LogNode mNext;
-    public LogNode getNext() {
-        return mNext;
-    }
+    private LogNode logNode;
     public void setNext(LogNode node) {
-        mNext = node;
+        logNode = node;
     }
     public void println(int priority, String tag, String msg, Throwable tr) {
         // There actually are log methods that don't take a msg parameter.  For now,
@@ -29,8 +26,8 @@ public class LogWrapper implements LogNode  {
         android.util.Log.println(priority, tag, useMsg);
 
         // If this isn't the last node in the chain, move things along.
-        if (mNext != null) {
-            mNext.println(priority, tag, msg, tr);
+        if (logNode != null) {
+            logNode.println(priority, tag, msg, tr);
         }
     }
 }
