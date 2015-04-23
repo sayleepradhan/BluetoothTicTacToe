@@ -196,11 +196,12 @@ public class GameFragment extends Fragment {
     }
 
     public void setupBoard() {
-        if (flag) {
+
             board = new TTTBoard();
             select_cross_btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Context context = getActivity().getApplicationContext();
+                    if (flag) {
                     if (mService.getState() == BluetoothService.STATE_CONNECTED) {
                         if (self_symbol.equals("")) {
                             turn = true;
@@ -216,6 +217,8 @@ public class GameFragment extends Fragment {
 
                         Toast toast = Toast.makeText(context, "Devices not paired", Toast.LENGTH_SHORT);
                         toast.show();
+                    } } else {
+                        Toast.makeText(context,"Select New Game", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -503,9 +506,7 @@ public class GameFragment extends Fragment {
                     }
                 }
             });
-        } else {
-            Toast.makeText(this.getActivity(),"Select New Game", Toast.LENGTH_LONG).show();
-        }
+
     }
 
     /**
