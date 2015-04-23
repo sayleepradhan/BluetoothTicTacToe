@@ -263,7 +263,10 @@ public class GameFragment extends Fragment {
                     }
                     sendData("0:move");
                     game_status.setText("Opponent's Turn");
-                }else if (board.noWinner()){
+                }else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
+                else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
                     return;
                 }
@@ -295,7 +298,10 @@ public class GameFragment extends Fragment {
                     else
                         game_status.setText("Opponent's Turn");
                     sendData("1:move");
-                }else if (board.noWinner()){
+                }else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
+                else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
                     return;
                 }
@@ -327,7 +333,10 @@ public class GameFragment extends Fragment {
                         game_status.setText("Opponent's Turn");
                     sendData("2:move");
 
-                }else if (board.noWinner()){
+                }else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
+                else if (board.noWinner()){
                     game_status.setText("Nobody won!");
                     return;
                 }
@@ -358,7 +367,10 @@ public class GameFragment extends Fragment {
                     else
                         game_status.setText("Opponent's Turn");
                     sendData("3:move");
-                }else if (board.noWinner()){
+                }else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
+                else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
                     return;
                 }
@@ -389,6 +401,8 @@ public class GameFragment extends Fragment {
                     else
                         game_status.setText("Opponent's Turn");
                     sendData("4:move");
+                }else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
                 }
                 else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
@@ -422,6 +436,9 @@ public class GameFragment extends Fragment {
                         game_status.setText("Opponent's Turn");
                     sendData("5:move");
                 }
+                else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
                 else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
                     return;
@@ -453,6 +470,9 @@ public class GameFragment extends Fragment {
                     else
                         game_status.setText("Opponent's Turn");
                     sendData("6:move");
+                }
+                else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
                 }
                 else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
@@ -486,6 +506,9 @@ public class GameFragment extends Fragment {
                         game_status.setText("Opponent's Turn");
                     sendData("7:move");
                 }
+                else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
                 else if (board.noWinner()){
                     game_status.setText("Nobody Won!");
                     return;
@@ -517,7 +540,15 @@ public class GameFragment extends Fragment {
                     else
                         game_status.setText("Opponent's Turn");
                     sendData("8:move");
-                } else if (!turn){
+                }
+                else if (mService.getState() != BluetoothService.STATE_CONNECTED){
+                    displayNotPaired();
+                }
+                else if (board.noWinner()){
+                    game_status.setText("Nobody Won!");
+                    return;
+                }
+                else if (!turn){
                     displayWhenNotYourTurn();
                 }
                 else if (self_symbol==""){
