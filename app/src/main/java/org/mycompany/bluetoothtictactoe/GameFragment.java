@@ -40,7 +40,7 @@ public class GameFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 3;
 
     // Layout Views
-   
+
     private Button mstartGameBtn;
     private Button select_zero_btn;
     private Button select_cross_btn;
@@ -183,6 +183,7 @@ public class GameFragment extends Fragment {
                 else
                 {
                     setupBoard();
+                    game_status.setText("Hello!");
                 }
             }
         });
@@ -659,7 +660,6 @@ public class GameFragment extends Fragment {
             self_symbol = "X";
             opp_symbol="O";
             select_zero_btn.setBackgroundColor(Color.LTGRAY);
-//            select_zero_btn.setClickable(false);
         }
         else if (message.equals("O")){
             Context context = getActivity().getApplicationContext();
@@ -667,7 +667,6 @@ public class GameFragment extends Fragment {
             toast.show();
             self_symbol = "O";
             opp_symbol="X";
-//            select_cross_btn.setClickable(false);
             select_cross_btn.setBackgroundColor(Color.LTGRAY);
         }
         else if (message.contains(":move")){
@@ -775,6 +774,9 @@ public class GameFragment extends Fragment {
         else
            game_status.setText("You Lost");
         setupBoard();
+        resetGame();
+        clickForNewGame();
+
     }
 
     public void markCross(int position){
@@ -789,6 +791,12 @@ public class GameFragment extends Fragment {
             btn[position].setImageResource(R.drawable.zero_image);
         }
     }
-
-
+    public void resetGame(){
+        for (int i=0;i<9;i++){
+            btn[i].setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+    public void clickForNewGame(){
+        game_status.setText("Click \"New Game\" to Start.");
+    }
 }
