@@ -13,6 +13,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +53,7 @@ public class GameFragment extends Fragment {
     private boolean flag = false;
     TTTBoard board;
     TextView game_status;
+    private boolean[] clicked;
     /**
      * Name of the connected device
      */
@@ -156,7 +158,10 @@ public class GameFragment extends Fragment {
         btn[8] = (ImageButton) view.findViewById(R.id.btn_2_2);
         self_symbol = "";
         opp_symbol ="";
+        clicked = new boolean[9];
+        resetClickedButtons();
         setupBoard();
+
     }
 
     /**
@@ -171,17 +176,17 @@ public class GameFragment extends Fragment {
         game_status = (TextView) getView().findViewById(R.id.game_status_icon);
         mstartGameBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-               flag = true;
+                resetGame();
+                enableButtons();
+                flag = true;
+                resetClickedButtons();
+                sendData("newgame");
                 Context context = getActivity().getApplicationContext();
                 int id = BluetoothService.STATE_CONNECTED;
-                if (mService.getState() != BluetoothService.STATE_CONNECTED)
-                {
-
-                    Toast toast = Toast.makeText(context,"Devices not paired",Toast.LENGTH_SHORT);
+                if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+                    Toast toast = Toast.makeText(context, "Devices not paired", Toast.LENGTH_SHORT);
                     toast.show();
-                }
-                else
-                {
+                } else {
                     setupBoard();
                 }
             }
@@ -198,10 +203,11 @@ public class GameFragment extends Fragment {
     public void setupBoard() {
 
             board = new TTTBoard();
+            game_status.setText("Hello!");
             select_cross_btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Context context = getActivity().getApplicationContext();
-                    if (flag) {
+                  if (flag) {
                     if (mService.getState() == BluetoothService.STATE_CONNECTED) {
                         if (self_symbol.equals("")) {
                             turn = true;
@@ -214,10 +220,10 @@ public class GameFragment extends Fragment {
                             toast.show();
                         }
                     } else {
-
                         Toast toast = Toast.makeText(context, "Devices not paired", Toast.LENGTH_SHORT);
                         toast.show();
-                    } } else {
+                    }
+                  } else {
                         Toast.makeText(context,"Select New Game", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -243,10 +249,12 @@ public class GameFragment extends Fragment {
                     }
                 }
             });
-            btn[0].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(0) == ' ' && !board.noWinner()) {
+        btn[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[0]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(0) == ' ') {
+                        clicked[0]=true;
                         if (self_symbol.equals("X"))
                             btn[0].setImageResource(R.drawable.cross_image);
                         else
@@ -255,28 +263,34 @@ public class GameFragment extends Fragment {
                         char moveResult = board.setMove(self_symbol.charAt(0), 0);
                         if (moveResult != ' ') {
                             displayResult(v, moveResult);
-                        }
+                        } else
+                            game_status.setText("Opponent's Turn");
                         sendData("0:move");
-                        game_status.setText("Opponent's Turn");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
+                else {
+                    displayClicked();
+                }
+            }
+        });
 
-            btn[1].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(1) == ' ' && !board.noWinner()) {
+        btn[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[1]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(1) == ' ') {
+                        clicked[1]=true;
                         if (self_symbol.equals("X"))
                             btn[1].setImageResource(R.drawable.cross_image);
                         else
@@ -290,22 +304,28 @@ public class GameFragment extends Fragment {
                         sendData("1:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[2].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(2) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[2]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(2) == ' ') {
+                        clicked[2]=true;
                         if (self_symbol.equals("X"))
                             btn[2].setImageResource(R.drawable.cross_image);
                         else
@@ -317,25 +337,31 @@ public class GameFragment extends Fragment {
                         } else
                             game_status.setText("Opponent's Turn");
                         sendData("2:move");
-
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[3].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(3) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+
+        btn[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[3]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(3) == ' ') {
+                        clicked[3]=true;
                         if (self_symbol.equals("X"))
                             btn[3].setImageResource(R.drawable.cross_image);
                         else
@@ -349,22 +375,28 @@ public class GameFragment extends Fragment {
                         sendData("3:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[4].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(4) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[4]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(4) == ' ') {
+                        clicked[4]=true;
                         if (self_symbol.equals("X"))
                             btn[4].setImageResource(R.drawable.cross_image);
                         else
@@ -378,22 +410,28 @@ public class GameFragment extends Fragment {
                         sendData("4:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[5].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(5) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[5]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(5) == ' ') {
+                        clicked[5]=true;
                         if (self_symbol.equals("X"))
                             btn[5].setImageResource(R.drawable.cross_image);
                         else
@@ -407,22 +445,28 @@ public class GameFragment extends Fragment {
                         sendData("5:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[6].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(6) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[6]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(6) == ' ') {
+                        clicked[6]=true;
                         if (self_symbol.equals("X"))
                             btn[6].setImageResource(R.drawable.cross_image);
                         else
@@ -436,22 +480,28 @@ public class GameFragment extends Fragment {
                         sendData("6:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-            btn[7].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(7) == ' ' && !board.noWinner()) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[7].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[7]){
+                    if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(7) == ' ') {
+                        clicked[7]=true;
                         if (self_symbol.equals("X"))
                             btn[7].setImageResource(R.drawable.cross_image);
                         else
@@ -465,22 +515,28 @@ public class GameFragment extends Fragment {
                         sendData("7:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        game_status.setText("Nobody Won!");
+                        disableButtons();
                     }
                 }
-            });
-            btn[8].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                else {
+                    displayClicked();
+                }
+            }
+        });
+        btn[8].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!clicked[8]){
                     if (mService.getState() == BluetoothService.STATE_CONNECTED && self_symbol != "" && turn == true && board.getSymbol(8) == ' ') {
+                        clicked[8]=true;
                         if (self_symbol.equals("X"))
                             btn[8].setImageResource(R.drawable.cross_image);
                         else
@@ -494,19 +550,22 @@ public class GameFragment extends Fragment {
                         sendData("8:move");
                     } else if (mService.getState() != BluetoothService.STATE_CONNECTED) {
                         displayNotPaired();
-                    } else if (board.noWinner()) {
-                        game_status.setText("Nobody Won!");
-                        return;
-                    } else if (!turn) {
+                    }
+                    else if (!turn) {
                         displayWhenNotYourTurn();
                     } else if (self_symbol == "") {
                         selectSymbolPrompt();
-                    } else {
-                        displayNotPaired();
+                    }
+                    if (board.noWinner()){
+                        disableButtons();
+                        game_status.setText("Nobody Won!");
                     }
                 }
-            });
-
+                else {
+                    displayClicked();
+                }
+            }
+        });
     }
 
     /**
@@ -526,24 +585,6 @@ public class GameFragment extends Fragment {
      *
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {
-        // Check that we're actually connected before trying anything
-        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothService to write
-            byte[] send = message.getBytes();
-            mService.write(send);
-
-            // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
-           //mOutEditText.setText(mOutStringBuffer);
-        }
-    }
 
     private void sendData(String message) {
         // Check that we're actually connected before trying anything
@@ -660,7 +701,6 @@ public class GameFragment extends Fragment {
             self_symbol = "X";
             opp_symbol="O";
             select_zero_btn.setBackgroundColor(Color.LTGRAY);
-//            select_zero_btn.setClickable(false);
         }
         else if (message.equals("O")){
             Context context = getActivity().getApplicationContext();
@@ -668,7 +708,6 @@ public class GameFragment extends Fragment {
             toast.show();
             self_symbol = "O";
             opp_symbol="X";
-//            select_cross_btn.setClickable(false);
             select_cross_btn.setBackgroundColor(Color.LTGRAY);
         }
         else if (message.contains(":move")){
@@ -694,6 +733,9 @@ public class GameFragment extends Fragment {
                 }
             }
 
+        }
+        else if (message.contains("newgame")){
+            displayNewGameMsg();
         }
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -768,14 +810,25 @@ public class GameFragment extends Fragment {
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Opponent's Turn",Toast.LENGTH_SHORT);
         toast.show();
     }
+    public void displayNewGameMsg(){
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"New Game Started",Toast.LENGTH_SHORT);
+        toast.show();
+    }
+    public void displayClicked(){
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Cell already marked",Toast.LENGTH_SHORT);
+        toast.show();
+    }
     public void displayResult(View v,char moveResult){
         //game_status = (TextView) v.findViewById(R.id.game_status_icon);
         if (moveResult==self_symbol.charAt(0)){
-            game_status.setText("You Won!");
+            game_status.setText("You Won!\n " +
+                    "Click 'New Game' to restart");
         }
         else {
-            game_status.setText("You Lost");
+            game_status.setText("You Lost\n" +
+                    " Click 'New Game' to restart");
         }
+        disableButtons();
         setupBoard();
     }
 
@@ -789,6 +842,32 @@ public class GameFragment extends Fragment {
         if (board.getSymbol(position)==' '){
             board.setMove('O',position);
             btn[position].setImageResource(R.drawable.zero_image);
+        }
+    }
+
+    public void resetClickedButtons(){
+        for (int i =0;i <9;i++){
+            clicked[i] = false;
+        }
+    }
+    public void resetGame(){
+
+        Fragment frg = null;
+        frg = getFragmentManager().findFragmentByTag("GameFragment");
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+    }
+    public void disableButtons(){
+        for (int i=0; i<9;i++){
+            btn[i].setEnabled(false);
+        }
+    }
+
+    public void enableButtons(){
+        for (int i=0; i<9;i++){
+            btn[i].setEnabled(true);
         }
     }
 
