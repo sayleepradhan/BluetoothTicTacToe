@@ -46,6 +46,41 @@ public class Log {
     }
 
     /**
+     * Instructs the LogNode to print the log data provided. Other LogNodes can
+     * be chained to the end of the LogNode as desired.
+     *
+     * @param priority Log level of the data being logged. Verbose, Error, etc.
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged. The actual message to be logged.
+     */
+    public static void println(int priority, String tag, String msg) {
+        println(priority, tag, msg, null);
+    }
+
+    /**
+     * Prints a message at VERBOSE priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     *           to extract and print useful information.
+     */
+    public static void v(String tag, String msg, Throwable tr) {
+        println(VERBOSE, tag, msg, tr);
+    }
+
+    /**
+     * Prints a message at VERBOSE priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     */
+    public static void v(String tag, String msg) {
+        v(tag, msg, null);
+    }
+
+
+    /**
      * Prints a message at DEBUG priority.
      *
      * @param tag Tag for for the log data. Can be used to organize log statements.
@@ -89,7 +124,38 @@ public class Log {
         i(tag, msg, null);
     }
 
+    /**
+     * Prints a message at WARN priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     *           to extract and print useful information.
+     */
+    public static void w(String tag, String msg, Throwable tr) {
+        println(WARN, tag, msg, tr);
+    }
 
+    /**
+     * Prints a message at WARN priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     */
+    public static void w(String tag, String msg) {
+        w(tag, msg, null);
+    }
+
+    /**
+     * Prints a message at WARN priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     *           to extract and print useful information.
+     */
+    public static void w(String tag, Throwable tr) {
+        w(tag, null, tr);
+    }
 
     /**
      * Prints a message at ERROR priority.
@@ -113,7 +179,36 @@ public class Log {
         e(tag, msg, null);
     }
 
+    /**
+     * Prints a message at ASSERT priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     *           to extract and print useful information.
+     */
+    public static void wtf(String tag, String msg, Throwable tr) {
+        println(ASSERT, tag, msg, tr);
+    }
 
+    /**
+     * Prints a message at ASSERT priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
+     */
+    public static void wtf(String tag, String msg) {
+        wtf(tag, msg, null);
+    }
 
-
+    /**
+     * Prints a message at ASSERT priority.
+     *
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     *           to extract and print useful information.
+     */
+    public static void wtf(String tag, Throwable tr) {
+        wtf(tag, null, tr);
+    }
 }
