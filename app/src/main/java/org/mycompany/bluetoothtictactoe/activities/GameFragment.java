@@ -141,7 +141,15 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+/**
+ * This method populates the view with UI elements on creation.
+ *
+ * Author: Malika Pahva (mxp134930)
+ *
+ * @param View
+ *
+ * @param Bundle
+ */
         startGameButton = (Button) view.findViewById(R.id.button_start);
         selectCrossButton = (Button) view.findViewById(R.id.select_cross_btn);
         selectZeroButton = (Button) view.findViewById(R.id.select_zero_btn);
@@ -164,15 +172,22 @@ public class GameFragment extends Fragment {
     }
 
     /**
-     * Set up the UI and background operations for chat.
+     * This method defines the behavior for UI elements on the game screen
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
      */
 
 
     private void setupGame() {
         Log.debug(TAG, "setupGame()");
 
-        // Initialize the start button with a listener that for click events
-        gameStatus = (TextView) getView().findViewById(R.id.game_status_icon);
+        /**
+         * This method initializes the start button with a listener that for click events
+         *
+         * Author: Saylee Pradhan (sap140530)
+
+         */
         startGameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 resetGame();
@@ -192,13 +207,19 @@ public class GameFragment extends Fragment {
         });
 
 
-        // Initialize the BluetoothService to perform bluetooth connections
+        // Initializes the BluetoothService to perform bluetooth connections
         bluetoothService = new BluetoothService(getActivity(), handler);
 
-        // Initialize the buffer for outgoing messages
+        // Initializes the buffer for outgoing messages
         outStringBuffer = new StringBuffer("");
     }
 
+    /**
+     * This method initializes the button for selecting Zero, Cross and the buttons in the 9X9 grid
+     *
+     * Author: Saylee Pradhan (sap140530)
+
+     */
     public void setupBoard() {
 
             board = new TTTBoard();
@@ -575,9 +596,11 @@ public class GameFragment extends Fragment {
             }
         });
     }
-
     /**
-     * Makes this device discoverable.
+     * This method makes this device discoverable.
+     *
+     * Author: Malika Pahva (mxp134930)
+
      */
     private void ensureDiscoverable() {
         if (bluetoothAdapter.getScanMode() !=
@@ -588,12 +611,12 @@ public class GameFragment extends Fragment {
         }
     }
 
-    /**
-     * Sends a message.
-     *
-     * @param message A string of text to send.
-     */
+/**
+ * This method sends a message to the other device.
+ *
+ * Author: Malika Pahva (mxp134930)
 
+ */
     private void sendData(String message) {
         // Check that we're actually connected before trying anything
         if (!bluetoothService.isConnected()) {
@@ -612,11 +635,14 @@ public class GameFragment extends Fragment {
 //            mOutEditText.setText(outStringBuffer);
         }
     }
+
     /**
-     * Updates the status on the action bar.
+     * This method updates the status on the action bar..
      *
-     * @param resId a string resource ID
+     * Author: Saylee Pradhan (sap140530)
+
      */
+
     private void setStatus(int resId) {
         FragmentActivity activity = getActivity();
         if (null == activity) {
@@ -630,9 +656,10 @@ public class GameFragment extends Fragment {
     }
 
     /**
-     * Updates the status on the action bar.
+     * This method updates the status on the action bar.
      *
-     * @param subTitle status
+     * Author: Saylee Pradhan (sap140530)
+
      */
     private void setStatus(CharSequence subTitle) {
         FragmentActivity activity = getActivity();
@@ -647,8 +674,12 @@ public class GameFragment extends Fragment {
     }
 
     /**
-     * The Handler that gets information back from the BluetoothService
+     * This method defines the Handler that gets information back from the BluetoothService
+     *
+     * Author: Malika Pahva (mxp134930)
+
      */
+
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -673,7 +704,7 @@ public class GameFragment extends Fragment {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    //mConversationArrayAdapter.add("Me:  " + writeMessage);
+
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
@@ -681,7 +712,7 @@ public class GameFragment extends Fragment {
                      readMessage = new String(readBuf, 0, msg.arg1);
                      getMessage(readMessage);
                      readMessage = "";
-                    //mConversationArrayAdapter.add(connectedDeviceName + ":  " + readMessage);
+
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -701,6 +732,12 @@ public class GameFragment extends Fragment {
         }
     };
 
+    /**
+     * This method defines various actions to be carried out by the device on receiving different messages.
+     *
+     * Author: Malika Pahva (mxp134930)
+
+     */
     public void getMessage(String message){
         if (message.equals("X")){
             Context context = getActivity().getApplicationContext();
@@ -750,6 +787,14 @@ public class GameFragment extends Fragment {
             disableButtons();
         }
     }
+    /**
+     * This method communicates with the DeviceListActivity to connect  and to start
+     * a session with the device.
+     *
+     * Author: Saylee Pradhan (sap140530)
+
+     */
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE_SECURE:
@@ -774,10 +819,13 @@ public class GameFragment extends Fragment {
     }
 
     /**
-     * Establish connection with other divice
+     * This method establishes connection with other device
      *
-     * @param data   An {@link Intent} with {@link org.mycompany.bluetoothtictactoe.activities.DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
+     * Author: Malika Pahva (mxp134930)
+     * @param data
+
      */
+
     private void connectDevice(Intent data) {
         // Get the device MAC address
         String address = data.getExtras()
@@ -810,26 +858,67 @@ public class GameFragment extends Fragment {
         }
         return false;
     }
+
+    /**
+     * This method displays a toast when the devices are not paired.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void displayNotPaired(){
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Devices not paired",Toast.LENGTH_SHORT);
         toast.show();
     }
+    /**
+     * This method prompts the user to select a symbol.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void selectSymbolPrompt(){
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Select a Symbol",Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    /**
+     * This method displays a toast when the user tries to make a move when it is not her turn.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void displayWhenNotYourTurn(){
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Opponent's Turn",Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    /**
+     * This method displays a toast when a new game is started by the other user.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void displayNewGameMsg(){
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"New Game Started",Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    /**
+     * This method displays a toast when the user tries to click on a cell which is already marked.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void displayClicked(){
         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Cell already marked",Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    /**
+     * This method displays a toast when either of the users has won or lost.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void displayResult(View v,char moveResult){
         //gameStatus = (TextView) verbose.findViewById(R.id.game_status_icon);
         if (moveResult== selfSymbol.charAt(0)){
@@ -844,39 +933,75 @@ public class GameFragment extends Fragment {
         setupBoard();
     }
 
+    /**
+     * This method marks a move by sending information to the TTTBoard class
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     */
     public void markCross(int position){
         if (board.getSymbol(position)==' '){
             board.setMove('X',position);
             imageButtons[position].setImageResource(R.drawable.cross_image);
         }
     }
+    /**
+     * This method marks a move by sending information to the TTTBoard class
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     */
     public void markZero(int position){
         if (board.getSymbol(position)==' '){
             board.setMove('O',position);
             imageButtons[position].setImageResource(R.drawable.zero_image);
         }
     }
-
+    /**
+     * This method resets all the clicked buttons
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     */
     public void resetClickedButtons(){
         for (int i =0;i <9;i++){
             clicked[i] = false;
         }
     }
+
+    /**
+     * This method resets the game by restarting the fragment
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     public void resetGame(){
 
         Fragment frg = null;
-        frg = getFragmentManager().findFragmentByTag("GameFragment");
+        frg = getFragmentManager().findFragmentById(R.id.sample_content_fragment);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(frg);
         ft.attach(frg);
         ft.commit();
     }
+
+    /**
+     * This method disables all the buttons on the 9X9 grid
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     */
     public void disableButtons(){
         for (int i=0; i<9;i++){
             imageButtons[i].setEnabled(false);
         }
     }
-
+    /**
+     * This method enables all the buttons on the 9X9 grid
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     */
     public void enableButtons(){
         for (int i=0; i<9;i++){
             imageButtons[i].setEnabled(true);
