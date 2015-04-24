@@ -925,6 +925,7 @@ public class GameFragment extends Fragment {
             gameStatus.setText("You Won!\n " +
                     "Click 'New Game' to restart");
         }
+
         else {
             gameStatus.setText("You Lost\n" +
                     " Click 'New Game' to restart");
