@@ -1,7 +1,8 @@
 package org.mycompany.bluetoothtictactoe.logger;
 
 /**
- * Created by Saylee on 4/19/2015.
+ * Created by Saylee Pradhan (sap140530) on 4/19/2015.
+ * Course: CS6301.001
  */
 public class Log {
     public static final int NONE = -1;
@@ -12,203 +13,256 @@ public class Log {
     public static final int ERROR = android.util.Log.ERROR;
     public static final int ASSERT = android.util.Log.ASSERT;
 
-    // Stores the beginning of the LogNode topology.
     private static LogNode logNode;
 
     /**
-     * Returns the next LogNode in the linked list.
+     * This is a getter method which returns the next
+     * LogNode in the linked list.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
      */
     public static LogNode getLogNode() {
         return logNode;
     }
 
     /**
-     * Sets the LogNode data will be sent to.
+     * This is a setter method which sets the LogNode data
+     * will be sent to.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
      */
     public static void setLogNode(LogNode node) {
         logNode = node;
     }
 
     /**
-     * Instructs the LogNode to print the log data provided. Other LogNodes can
-     * be chained to the end of the LogNode as desired.
+     * This method instructs the LogNode to print the log data provided.
      *
-     * @param priority Log level of the data being logged. Verbose, Error, etc.
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param priority
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void println(int priority, String tag, String msg, Throwable tr) {
+    public static void println(int priority, String tag, String msg, Throwable throwable) {
         if (logNode != null) {
-            logNode.println(priority, tag, msg, tr);
+            logNode.println(priority, tag, msg, throwable);
         }
     }
 
     /**
-     * Instructs the LogNode to print the log data provided. Other LogNodes can
-     * be chained to the end of the LogNode as desired.
+     * This method instructs the LogNode to print the log data provided.
      *
-     * @param priority Log level of the data being logged. Verbose, Error, etc.
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged. The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param priority
+     *
+     * @param tag
+     *
+     * @param msg
      */
     public static void println(int priority, String tag, String msg) {
         println(priority, tag, msg, null);
     }
 
     /**
-     * Prints a message at VERBOSE priority.
+     * This method prints a message at VERBOSE priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void v(String tag, String msg, Throwable tr) {
-        println(VERBOSE, tag, msg, tr);
+    public static void verbose(String tag, String msg, Throwable throwable) {
+        println(VERBOSE, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at VERBOSE priority.
+     * This method prints a message at VERBOSE priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void v(String tag, String msg) {
-        v(tag, msg, null);
+    public static void verbose(String tag, String msg) {
+        verbose(tag, msg, null);
     }
 
 
     /**
-     * Prints a message at DEBUG priority.
+     * This method prints a message at DEBUG priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void d(String tag, String msg, Throwable tr) {
-        println(DEBUG, tag, msg, tr);
+    public static void debug(String tag, String msg, Throwable throwable) {
+        println(DEBUG, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at DEBUG priority.
+     * This method prints a message at DEBUG priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void d(String tag, String msg) {
-        d(tag, msg, null);
+    public static void debug(String tag, String msg) {
+        debug(tag, msg, null);
     }
 
     /**
-     * Prints a message at INFO priority.
+     * This method prints a message at INFO priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void i(String tag, String msg, Throwable tr) {
-        println(INFO, tag, msg, tr);
+    public static void info(String tag, String msg, Throwable throwable) {
+        println(INFO, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at INFO priority.
+     * This method prints a message at INFO priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void i(String tag, String msg) {
-        i(tag, msg, null);
+    public static void info(String tag, String msg) {
+        info(tag, msg, null);
     }
 
     /**
-     * Prints a message at WARN priority.
+     * This method prints a message at WARN priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void w(String tag, String msg, Throwable tr) {
-        println(WARN, tag, msg, tr);
+    public static void warn(String tag, String msg, Throwable throwable) {
+        println(WARN, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at WARN priority.
+     * This method prints a message at WARN priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void w(String tag, String msg) {
-        w(tag, msg, null);
+    public static void warn(String tag, String msg) {
+        warn(tag, msg, null);
     }
 
     /**
-     * Prints a message at WARN priority.
+     * This method prints a message at WARN priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param throwable
      */
-    public static void w(String tag, Throwable tr) {
-        w(tag, null, tr);
+    public static void warn(String tag, Throwable throwable) {
+        warn(tag, null, throwable);
     }
 
     /**
-     * Prints a message at ERROR priority.
+     * This message prints a message at ERROR priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void e(String tag, String msg, Throwable tr) {
-        println(ERROR, tag, msg, tr);
+    public static void error(String tag, String msg, Throwable throwable) {
+        println(ERROR, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at ERROR priority.
+     * This message prints a message at ERROR priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void e(String tag, String msg) {
-        e(tag, msg, null);
+    public static void error(String tag, String msg) {
+        error(tag, msg, null);
     }
 
     /**
-     * Prints a message at ASSERT priority.
+     * This method prints a message at ASSERT priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
-    public static void wtf(String tag, String msg, Throwable tr) {
-        println(ASSERT, tag, msg, tr);
+    public static void assertPriority(String tag, String msg, Throwable throwable) {
+        println(ASSERT, tag, msg, throwable);
     }
 
     /**
-     * Prints a message at ASSERT priority.
+     * This method prints a message at ASSERT priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param msg The actual message to be logged.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param msg
      */
-    public static void wtf(String tag, String msg) {
-        wtf(tag, msg, null);
+    public static void assertPriority(String tag, String msg) {
+        assertPriority(tag, msg, null);
     }
 
     /**
-     * Prints a message at ASSERT priority.
+     * This method prints a message at ASSERT priority.
      *
-     * @param tag Tag for for the log data. Can be used to organize log statements.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param tag
+     *
+     * @param throwable
      */
-    public static void wtf(String tag, Throwable tr) {
-        wtf(tag, null, tr);
+    public static void assertPriority(String tag, Throwable throwable) {
+        assertPriority(tag, null, throwable);
     }
 }

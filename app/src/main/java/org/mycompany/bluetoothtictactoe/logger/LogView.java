@@ -6,35 +6,70 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
- * Created by Saylee on 4/19/2015.
+ * Created by Saylee Pradhan (sap140530) on 4/19/2015.
+ * Course: CS6360.001
+ *
+ * This class prints the log data returned by the LogNode.
  */
 public class LogView extends TextView implements LogNode {
+
+    /**
+     * This is a constructor to set the context.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param context
+     */
     public LogView(Context context) {
         super(context);
     }
 
-    public LogView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    /**
+     * This is a constructor to set the context and attributes.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param context
+     *
+     * @param attributeSet
+     */
+    public LogView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
     }
 
-    public LogView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
     /**
-     * Formats the log data and prints it out to the LogView.
-     * @param priority Log level of the data being logged.  Verbose, Error, etc.
-     * @param tag Tag for for the log data.  Can be used to organize log statements.
-     * @param msg The actual message to be logged. The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
+     * This is a constructor to set the context, attributes and
+     * style.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param context
+     *
+     * @param attributeSet
+     *
+     * @param defStyle
+     */
+    public LogView(Context context, AttributeSet attributeSet, int defStyle) {
+        super(context, attributeSet, defStyle);
+    }
+
+    /**
+     * This method displays the data to view.
+     *
+     * Author: Saylee Pradhan (sap140530)
+     *
+     * @param priority
+     *
+     * @param tag
+     *
+     * @param msg
+     *
+     * @param throwable
      */
     @Override
-    public void println(int priority, String tag, String msg, Throwable tr) {
-
-
+    public void println(int priority, String tag, String msg, Throwable throwable) {
         String priorityStr = null;
 
-        // For the purposes of this View, we want to print the priority as readable text.
         switch(priority) {
             case android.util.Log.VERBOSE:
                 priorityStr = "VERBOSE";
@@ -58,14 +93,11 @@ public class LogView extends TextView implements LogNode {
                 break;
         }
 
-        // Handily, the Log class has a facility for converting a stack trace into a usable string.
         String exceptionStr = null;
-        if (tr != null) {
-            exceptionStr = android.util.Log.getStackTraceString(tr);
+        if (throwable != null) {
+            exceptionStr = android.util.Log.getStackTraceString(throwable);
         }
 
-        // Take the priority, tag, message, and exception, and concatenate as necessary
-        // into one usable line of text.
         final StringBuilder outputBuilder = new StringBuilder();
 
         String delimiter = "\t";
@@ -74,50 +106,48 @@ public class LogView extends TextView implements LogNode {
         appendIfNotNull(outputBuilder, msg, delimiter);
         appendIfNotNull(outputBuilder, exceptionStr, delimiter);
 
-        // In case this was originally called from an AsyncTask or some other off-UI thread,
-        // make sure the update occurs within the UI thread.
         ((Activity) getContext()).runOnUiThread( (new Thread(new Runnable() {
             @Override
             public void run() {
-                // Display the text we just generated within the LogView.
                 appendToLog(outputBuilder.toString());
             }
         })));
 
-        if (mNext != null) {
-            mNext.println(priority, tag, msg, tr);
+        if (logNode != null) {
+            logNode.println(priority, tag, msg, throwable);
         }
     }
 
 
 
-    /** Takes a string and adds to it, with a separator, if the bit to be added isn't null. Since
-     * the logger takes so many arguments that might be null, this method helps cut out some of the
-     * agonizing tedium of writing the same 3 lines over and over.
-     * @param source StringBuilder containing the text to append to.
-     * @param addStr The String to append
-     * @param delimiter The String to separate the source and appended strings. A tab or comma,
-     *                  for instance.
-     * @return The fully concatenated String as a StringBuilder
+    /** This method appends the string to StringBuilder if
+     *  string is not null.
+     *
+     *  Author: Saylee Pradhan (sap140530)
+     *
+     * @param source
+     *          containing the text to append to.
+     * @param stringToAdd
+     *          it is a String to append
+     * @param delimiter
+     *
+     *          separator to separate the source and appended string
+     * @return StringBuilder source
      */
-    private StringBuilder appendIfNotNull(StringBuilder source, String addStr, String delimiter) {
-        if (addStr != null) {
-            if (addStr.length() == 0) {
+    private StringBuilder appendIfNotNull(StringBuilder source, String stringToAdd, String delimiter) {
+        if (stringToAdd != null) {
+            if (stringToAdd.length() == 0) {
                 delimiter = "";
             }
 
-            return source.append(addStr).append(delimiter);
+            return source.append(stringToAdd).append(delimiter);
         }
         return source;
     }
 
-    // The next LogNode in the chain.
-    LogNode mNext;
+    LogNode logNode;
 
-    /** Outputs the string as a new line of log data in the LogView. */
     public void appendToLog(String s) {
         append("\n" + s);
     }
-
-
 }

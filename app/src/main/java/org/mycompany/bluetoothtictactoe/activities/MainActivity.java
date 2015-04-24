@@ -11,14 +11,23 @@ import org.mycompany.bluetoothtictactoe.logger.LogFragment;
 import org.mycompany.bluetoothtictactoe.logger.LogWrapper;
 import org.mycompany.bluetoothtictactoe.logger.MessageOnlyLogFilter;
 
-
+/**
+ * Created by Malika Pahva (mxp134930) on 4/18/2015.
+ * Course: CS6301.001
+ *
+ * This class creates the fragments for main screen.
+ */
 public class MainActivity extends SampleActivityBase {
 
     public static final String TAG = "MainActivity";
 
-    // Whether the Log Fragment is currently shown
-    private boolean mLogShown;
-
+    /**
+     * This method create new fragments for main screen.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,19 +41,22 @@ public class MainActivity extends SampleActivityBase {
         }
     }
 
+    /**
+     * This method sets the menu on action bar.
+     *
+     * @param
+     *
+     * @return boolean
+     */
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -53,23 +65,25 @@ public class MainActivity extends SampleActivityBase {
 //        }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
+
+    /**
+     * This method set up the log data via fragment in TextView.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     */
     @Override
     public void initializeLogging() {
-        // Wraps Android's native log framework.
         LogWrapper logWrapper = new LogWrapper();
-        // Using Log, front-end to the logging chain, emulates android.util.log method signatures.
         Log.setLogNode(logWrapper);
 
-        // Filter strips out everything except the message text.
         MessageOnlyLogFilter msgFilter = new MessageOnlyLogFilter();
         logWrapper.setNext(msgFilter);
-
-        // On screen logging via a fragment with a TextView.
         LogFragment logFragment = (LogFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.log_fragment);
         msgFilter.setNext(logFragment.getLogView());
 
-        Log.i(TAG, "Ready");
+        Log.info(TAG, "Ready");
     }
 }

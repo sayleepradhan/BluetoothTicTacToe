@@ -30,6 +30,9 @@ import org.mycompany.bluetoothtictactoe.model.TTTBoard;
 import org.mycompany.bluetoothtictactoe.logger.Log;
 
 /**
+ * Created by Saylee Pradhan (sap140530) on 4/20/2015.
+ * Course: CS6301.001
+ *
  * This fragment controls Bluetooth to communicate with other devices.
  */
 public class GameFragment extends Fragment {
@@ -166,7 +169,7 @@ public class GameFragment extends Fragment {
 
 
     private void setupGame() {
-        Log.d(TAG, "setupGame()");
+        Log.debug(TAG, "setupGame()");
 
         // Initialize the start button with a listener that for click events
         gameStatus = (TextView) getView().findViewById(R.id.game_status_icon);
@@ -199,7 +202,7 @@ public class GameFragment extends Fragment {
     public void setupBoard() {
 
             board = new TTTBoard();
-            gameStatus.setText("Hello!");
+//            gameStatus.setText("Hello!");
             selectCrossButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Context context = getActivity().getApplicationContext();
@@ -762,7 +765,7 @@ public class GameFragment extends Fragment {
                     setupGame();
                 } else {
                     // User did not enable Bluetooth or an error occurred
-                    Log.d(TAG, "BT not enabled");
+                    Log.debug(TAG, "BT not enabled");
                     Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
                             Toast.LENGTH_SHORT).show();
                     getActivity().finish();
@@ -828,7 +831,7 @@ public class GameFragment extends Fragment {
         toast.show();
     }
     public void displayResult(View v,char moveResult){
-        //gameStatus = (TextView) v.findViewById(R.id.game_status_icon);
+        //gameStatus = (TextView) verbose.findViewById(R.id.game_status_icon);
         if (moveResult== selfSymbol.charAt(0)){
             gameStatus.setText("You Won!\n " +
                     "Click 'New Game' to restart");
