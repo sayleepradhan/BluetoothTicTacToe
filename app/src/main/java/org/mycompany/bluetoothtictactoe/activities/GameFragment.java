@@ -39,13 +39,9 @@ public class GameFragment extends Fragment {
 
     private static final String TAG = "GameFragment";
 
-    // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-    //private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BUTTON = 3;
 
-    // Layout Views
-   
     private Button startGameButton;
     private Button selectZeroButton;
     private Button selectCrossButton;
@@ -58,34 +54,28 @@ public class GameFragment extends Fragment {
     TTTBoard board;
     TextView gameStatus;
     private boolean[] clicked;
-    /**
-     * Name of the connected device
-     */
     private String connectedDeviceName = null;
 
-    /**
-     * String buffer for outgoing messages
-     */
     private StringBuffer outStringBuffer;
 
-    /**
-     * Local Bluetooth adapter
-     */
     private BluetoothAdapter bluetoothAdapter = null;
 
-    /**
-     * Member object for the chat services
-     */
+
     private BluetoothService bluetoothService = null;
 
+    /**
+     * This method create new fragments for main screen.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        // Get local Bluetooth adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // If the adapter is null, then Bluetooth is not supported
         if (bluetoothAdapter == null) {
             FragmentActivity activity = getActivity();
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -93,22 +83,30 @@ public class GameFragment extends Fragment {
         }
     }
 
-
+    /**
+     * This method enables the bluetooth adapter.
+     *
+     * Author:  Saylee Pradhan (sap140530)
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();
-        //bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        // If BT is not on, request that it be enabled.
-        // setupGame() will then be called during onActivityResult
+
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BUTTON);
-            // Otherwise, setup the chat session
         } else if (bluetoothService == null) {
             setupGame();
         }
     }
 
+    /**
+     * This method closes the bluetooth Service.
+     *
+     * Author:  Saylee Pradhan (sap140530)
+     *
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -117,39 +115,53 @@ public class GameFragment extends Fragment {
         }
     }
 
+    /**
+     * This method enables the bluetooth adapter after resuming
+     * the fragment.
+     *
+     * Author:  Saylee Pradhan (sap140530)
+     *
+     */
     @Override
     public void onResume() {
         super.onResume();
-
-        // Performing this check in onResume() covers the case in which BT was
-        // not enabled during onStart(), so we were paused to enable it...
-        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (bluetoothService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
             if (bluetoothService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Bluetooth chat services
                 bluetoothService.start();
             }
         }
     }
 
+    /**
+     * This method sets up the view of the screen on creation
+     * of fragment.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     * @param inflater
+     *
+     * @param container
+     *
+     * @param savedInstanceState
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
+
+    /**
+     * This method populates the view with UI elements on creation.
+     *
+     * Author: Malika Pahva (mxp134930)
+     *
+     * @param view
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-/**
- * This method populates the view with UI elements on creation.
- *
- * Author: Malika Pahva (mxp134930)
- *
- * @param View
- *
- * @param Bundle
- */
         startGameButton = (Button) view.findViewById(R.id.button_start);
         selectCrossButton = (Button) view.findViewById(R.id.select_cross_btn);
         selectZeroButton = (Button) view.findViewById(R.id.select_zero_btn);
@@ -207,10 +219,8 @@ public class GameFragment extends Fragment {
         });
 
 
-        // Initializes the BluetoothService to perform bluetooth connections
         bluetoothService = new BluetoothService(getActivity(), handler);
 
-        // Initializes the buffer for outgoing messages
         outStringBuffer = new StringBuffer("");
     }
 
@@ -223,7 +233,6 @@ public class GameFragment extends Fragment {
     public void setupBoard() {
 
             board = new TTTBoard();
-//            gameStatus.setText("Hello!");
             selectCrossButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Context context = getActivity().getApplicationContext();
@@ -618,21 +627,16 @@ public class GameFragment extends Fragment {
 
  */
     private void sendData(String message) {
-        // Check that we're actually connected before trying anything
         if (!bluetoothService.isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check that there's actually something to send
         if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothService to write
             byte[] send = message.getBytes();
             bluetoothService.write(send);
 
-            // Reset out string buffer to zero and clear the edit text field
             outStringBuffer.setLength(0);
-//            mOutEditText.setText(outStringBuffer);
         }
     }
 
@@ -689,7 +693,6 @@ public class GameFragment extends Fragment {
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, connectedDeviceName));
-                            //mConversationArrayAdapter.clear();
                             break;
                         case BluetoothService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -702,20 +705,17 @@ public class GameFragment extends Fragment {
                     break;
                 case Constants.MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
-                    // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
 
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
                      readMessage = new String(readBuf, 0, msg.arg1);
                      getMessage(readMessage);
                      readMessage = "";
 
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
-                    // save the connected device's name
                     connectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
                     if (null != activity) {
                         Toast.makeText(activity, "Connected to "
@@ -798,18 +798,14 @@ public class GameFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE_SECURE:
-                // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data);
                 }
                 break;
             case REQUEST_ENABLE_BUTTON:
-                // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a  session
                     setupGame();
                 } else {
-                    // User did not enable Bluetooth or an error occurred
                     Log.debug(TAG, "BT not enabled");
                     Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
                             Toast.LENGTH_SHORT).show();
@@ -822,36 +818,50 @@ public class GameFragment extends Fragment {
      * This method establishes connection with other device
      *
      * Author: Malika Pahva (mxp134930)
+     *
      * @param data
 
      */
 
     private void connectDevice(Intent data) {
-        // Get the device MAC address
         String address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-        // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
         bluetoothService.connect(device);
     }
 
+    /**
+     * This method sets the game menu on action bar.
+     *
+     * Author: Malika Pahva(mxp134930)
+     *
+     * @param
+     *
+     * @return boolean
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_game, menu);
     }
 
+    /**
+     * This method specifies the action of on click of menu item.
+     *
+     * Author: Malika Pahva(mxp134930)
+     *
+     * @param
+     *
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.connect_scan: {
-                // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
             }
             case R.id.discoverable: {
-                // Ensure this device is discoverable by others
                 ensureDiscoverable();
                 return true;
             }
@@ -920,7 +930,6 @@ public class GameFragment extends Fragment {
      *
      */
     public void displayResult(View v,char moveResult){
-        //gameStatus = (TextView) verbose.findViewById(R.id.game_status_icon);
         if (moveResult== selfSymbol.charAt(0)){
             gameStatus.setText("You Won!\n " +
                     "Click 'New Game' to restart");
