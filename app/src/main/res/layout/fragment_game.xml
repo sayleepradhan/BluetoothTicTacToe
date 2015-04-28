@@ -47,7 +47,7 @@
                 android:gravity="center"
                 android:padding="4dp" >
 
-                <Button
+                <ImageButton
 
                     android:id="@+id/select_zero_btn"
                     android:layout_width="60dp"
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:padding="4dp" >
 
-                <Button
+                <ImageButton
 
                     android:id="@+id/select_cross_btn"
                     android:layout_width="60dp"
