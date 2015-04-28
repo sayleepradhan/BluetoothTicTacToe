@@ -94,6 +94,8 @@ public class TTTBoard {
             flag = true;
         if (flag)
             result = symbol;
+        else if (noWinner())
+            result = 'N';
         return result;
     }
 
